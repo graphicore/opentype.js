@@ -34,6 +34,7 @@ var _name = require('./tables/name');
 var os2 = require('./tables/os2');
 var post = require('./tables/post');
 var meta = require('./tables/meta');
+var svg = require('./tables/svg');
 
 /**
  * The opentype library.
@@ -218,6 +219,7 @@ function parseBuffer(buffer) {
     var locaTableEntry;
     var nameTableEntry;
     var metaTableEntry;
+    var svgTableEntry;
     var p;
 
     for (var i = 0; i < numTables; i += 1) {
@@ -305,6 +307,10 @@ function parseBuffer(buffer) {
             case 'meta':
                 metaTableEntry = tableEntry;
                 break;
+            case 'SVG ':
+                svgTableEntry = tableEntry;
+                break;
+
         }
     }
 
@@ -355,6 +361,10 @@ function parseBuffer(buffer) {
         var metaTable = uncompressTable(data, metaTableEntry);
         font.tables.meta = meta.parse(metaTable.data, metaTable.offset);
         font.metas = font.tables.meta;
+    }
+    if (svgTableEntry) {
+        var svgTable = uncompressTable(data, svgTableEntry);
+        font.tables.svg = svg.parse(svgTable.data, svgTable.offset);
     }
 
     return font;

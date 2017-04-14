@@ -21,6 +21,7 @@ var os2 = require('./os2');
 var post = require('./post');
 var gsub = require('./gsub');
 var meta = require('./meta');
+var svg = require('./svg');
 
 function log2(v) {
     return Math.log(v) / Math.log(2) | 0;
@@ -313,6 +314,10 @@ function fontToSfntTable(font) {
     }
     if (metaTable) {
         tables.push(metaTable);
+    }
+
+    if(font.tables.svg) {
+        tables.push(svg.make(font.tables.svg));
     }
 
     var sfntTable = makeSfntTable(tables);

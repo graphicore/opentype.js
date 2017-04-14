@@ -62,7 +62,6 @@ function parseCFFIndex(data, start, conversionFn) {
         if (conversionFn) {
             value = conversionFn(value);
         }
-
         objects.push(value);
     }
 
@@ -1072,7 +1071,9 @@ function makeCFFTable(glyphs, options) {
     // Skip first glyph (.notdef)
     for (var i = 1; i < glyphs.length; i += 1) {
         glyph = glyphs.get(i);
-        glyphNames.push(glyph.name);
+        if(glyph.name !== undefined) {
+            glyphNames.push(glyph.name);
+        }
     }
 
     var strings = [];

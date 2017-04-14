@@ -353,13 +353,13 @@ sizeOf.STRING = sizeOf.CHARARRAY;
  * @returns {string}
  */
 decode.UTF8 = function(data, offset, numBytes) {
-    var codePoints = [];
+    var chars = [];
     var numChars = numBytes;
     for (var j = 0; j < numChars; j++, offset += 1) {
-        codePoints[j] = data.getUint8(offset);
+        chars.push(String.fromCharCode(data.getUint8(offset)));
     }
 
-    return String.fromCharCode.apply(null, codePoints);
+    return chars.join('');
 };
 
 /**

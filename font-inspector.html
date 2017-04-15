@@ -73,6 +73,9 @@
 
         <h3 class="collapsed">Font program <a href="https://www.microsoft.com/typography/OTSPEC/fpgm.htm" target="_blank">fpgm</a></h3>
         <dl id="fpgm-table"><dt>Undefined</dt></dl>
+
+        <h3 class="collapsed">SVG table <a href="https://www.microsoft.com/typography/otspec/svg.htm" target="_blank">svg</a></h3>
+        <dl id="svg-table"><dt>Undefined</dt></dl>
     </div>
 
     <hr>
@@ -181,10 +184,10 @@ function displayFontData() {
             html += '<dt>'+property+'</dt><dd>';
             if (Array.isArray(value) && typeof value[0] === 'object') {
                 html += value.map(function(item) {
-                    return JSON.stringify(item);
+                    return escapeHtml(JSON.stringify(item));
                 }).join('<br>');
             } else if (typeof value === 'object') {
-              html += JSON.stringify(value);
+              html += escapeHtml(JSON.stringify(value));
             } else if (['created', 'modified'].indexOf(property) > -1) {
                 var date = new Date(value * 1000);
                 html += date;

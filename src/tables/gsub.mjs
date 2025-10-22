@@ -211,7 +211,7 @@ function parseGsubTable(data, start) {
     }
 
     for ( const fi in table.features ) {
-        if ( ! table.features.hasOwnProperty(fi) ) continue;
+        if ( ! Object.hasOwn(table.features, fi) ) continue;
         const f = table.features[fi];
         // Match `ss01` to `ss20`
         if (f.tag.match(/ss(?:0[1-9]|1\d|20)/)) {
@@ -392,13 +392,13 @@ subtableMakers[6] = function makeLookup6(subtable) {
             tableData.push({name: 'backtrackCoverage' + i, type: 'TABLE', value: new table.Coverage(coverage)});
         }
         tableData.push({name: 'inputGlyphCount', type: 'USHORT', value: subtable.inputCoverage.length});
-        
+
         for(let i = 0; i < subtable.inputCoverage.length; i++) {
             const coverage = subtable.inputCoverage[i];
             tableData.push({name: 'inputCoverage' + i, type: 'TABLE', value: new table.Coverage(coverage)});
         }
         tableData.push({name: 'lookaheadGlyphCount', type: 'USHORT', value: subtable.lookaheadCoverage.length});
-        
+
         for(let i = 0; i < subtable.lookaheadCoverage.length; i++) {
             const coverage = subtable.lookaheadCoverage[i];
             tableData.push({name: 'lookaheadCoverage' + i, type: 'TABLE', value: new table.Coverage(coverage)});

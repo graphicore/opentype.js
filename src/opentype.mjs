@@ -374,17 +374,25 @@ function parseBuffer(buffer, opt={}) {
         const gsubTable = uncompressTable(data, gsubTableEntry);
         font.tables.gsub = gsub.parse(gsubTable.data, gsubTable.offset);
         for ( const fi in font.tables.gsub.features ) {
-            if ( ! font.tables.gsub.features.hasOwnProperty(fi) ) continue;
-            const f = font.tables.gsub.features[fi];
+            if ( ! Object.hasOwn(font.tables.gsub.features, fi) ) continue;
+            const {tag, feature} = font.tables.gsub.features[fi];
             // Match `ss01` to `ss20`
-            if (f.tag.match(/ss(?:0[1-9]|1\d|20)/)) {
-                const { uiNameId } = f.feature.featureParamsTable;
-                f.feature.uiName = font.tables.name[uiNameId];
+            if (tag.match(/ss(?:0[1-9]|1\d|20)/)) {
+                const { uiNameId } = feature.featureParamsTable;
+                for(const [platform, table] of Object.entries(font.tables.name)){
+                    if(!(uiNameId in table)) continue;
+                    if(!feature.uiName) feature.uiName = {};
+                    feature.uiName[platform] = table[uiNameId];
+                }
             }
             // Match `cv01` to `cv99`
-            else if (f.tag.match(/cv(?:0[1-9]|[1-9]\d)/)) {
-                const { featUiLabelNameId } = f.feature.featureParamsTable;
-                f.feature.featUiLabelName = font.tables.name[featUiLabelNameId];
+            else if (tag.match(/cv(?:0[1-9]|[1-9]\d)/)) {
+                const { featUiLabelNameId } = feature.featureParamsTable;
+                for(const [platform, table] of Object.entries(font.tables.name)){
+                    if(!(featUiLabelNameId in table)) continue;
+                    if(!feature.featUiLabelName) feature.featUiLabelName = {};
+                    feature.featUiLabelName[platform] = table[featUiLabelNameId];
+                }
             }
         };
     }
